@@ -85,7 +85,7 @@ export const getFolderIcon = (plugin: FileTreeAlternativePlugin, children: boole
         InactiveOpenFolderIcon = CgCloseO;
         ClosedFolderIcon = CgAdd;
     }
-
+    
     const Icon = children ? (open ? OpenFolderIcon : ClosedFolderIcon) : InactiveOpenFolderIcon;
 
     return Icon;

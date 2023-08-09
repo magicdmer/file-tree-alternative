@@ -36,12 +36,17 @@ export default function Tree(props: TreeProps) {
 
     const isFolderActive = props.folder.path === activeFolderPath;
 
+    const filteredChildren = props.folder.children.filter((item) => !props.plugin.settings.excludedFolders.contains(item.path)).
+            filter((item) => !props.plugin.settings.excludedFolders.contains(item.name)).
+            filter((item) => item instanceof TFolder);
+
     // --> For state update from outside of the component
     useEffect(() => setOpen(props.open), [props.open]);
 
     // --> Icon to be toggled between min(-) and plus(+) Each click sets openFolders Main Component state to save in settings
     const toggle = () => {
-        if (props.children) {
+        //debugger;
+        if (filteredChildren.length > 0) {
             // Set State in Main Component for Keeping Folders Open
             if (!open) {
                 setOpenFolders([...openFolders, props.folder.path]);
@@ -76,7 +81,7 @@ export default function Tree(props: TreeProps) {
     const folderContextMenuEvent = () => props.onContextMenu();
 
     // --> Icon
-    const Icon = useMemo(() => getFolderIcon(props.plugin, props.children, open), [open, props.children]);
+    const Icon = useMemo(() => getFolderIcon(props.plugin, filteredChildren.length > 0, open), [open, props.children]);
 
     // --> Folder Count Map
     const folderCount = folderFileCountMap[props.folder.path];
@@ -146,7 +151,7 @@ export default function Tree(props: TreeProps) {
 
                             <div className="oz-folder-line">
                                 <div className="oz-icon-div">
-                                    <Icon className="oz-folder-toggle" style={{ opacity: props.children ? 1 : 0.3 }} onClick={toggle} />
+                                    <Icon className="oz-folder-toggle" style={{ opacity: filteredChildren.length > 0 ? 1 : 0.3 }} onClick={toggle} />
                                 </div>
 
                                 <div

@@ -31,7 +31,8 @@ export function NestedFolders(props: NestedFoldersProps) {
     const getSortedFolderTree = (folderTree: FolderTree[]) => {
         let newTree: FolderTree[] = folderTree;
         if (excludedFolders.length > 0) {
-            newTree = newTree.filter((tree) => !excludedFolders.contains(tree.folder.path));
+            newTree = newTree.filter((tree) => !excludedFolders.contains(tree.folder.path)).
+                filter((tree) => !excludedFolders.contains(tree.folder.name));
         }
         newTree = newTree.sort((a, b) => {
             if (plugin.settings.sortFoldersBy === 'name') {
@@ -55,8 +56,12 @@ export function NestedFolders(props: NestedFoldersProps) {
         // Menu Items
         const folderMenu = new Menu(plugin.app);
 
+        const filteredChildren = folder.children.filter((item) => !excludedFolders.contains(item.path)).
+            filter((item) => !excludedFolders.contains(item.name)).
+            filter((item) => item instanceof TFolder);
+
         // Focus Items
-        if (Util.hasChildFolder(folder)) {
+        if (filteredChildren.length > 0) {
             folderMenu.addItem((menuItem) => {
                 menuItem
                     .setTitle('Focus on Folder')

@@ -72,7 +72,7 @@ export function FileComponent(props: FilesProps) {
         if (excludedFolders.length > 0) {
             sortedfileList = sortedfileList.filter((file) => {
                 for (let exc of excludedFolders) {
-                    if (file.path.startsWith(exc)) {
+                    if (file.path.startsWith(exc) || file.parent.name === exc) {
                         return false;
                     }
                 }
