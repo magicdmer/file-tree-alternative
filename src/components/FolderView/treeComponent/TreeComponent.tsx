@@ -11,6 +11,7 @@ type TreeProps = {
     open?: boolean;
     content?: string;
     onClick?: Function;
+    onDoubleClick: Function;
     onContextMenu?: Function;
     type?: any;
     style?: any;
@@ -79,6 +80,11 @@ export default function Tree(props: TreeProps) {
         }
     };
     const folderContextMenuEvent = () => props.onContextMenu();
+
+    const folderNameDoubleClickEvent = (ev: React.MouseEvent) => {
+        setOpen(true);
+        props.onDoubleClick();
+    };
 
     // --> Icon
     const Icon = useMemo(() => getFolderIcon(props.plugin, filteredChildren.length > 0, open), [open, props.children]);
@@ -157,6 +163,7 @@ export default function Tree(props: TreeProps) {
                                 <div
                                     className="oz-folder-block"
                                     onClick={folderNameClickEvent}
+                                    onDoubleClick={folderNameDoubleClickEvent}
                                     onContextMenu={folderContextMenuEvent}
                                     {...longPressEvents}>
                                     <div className="oz-folder-type" style={{ marginRight: props.type ? 10 : 0 }}>
